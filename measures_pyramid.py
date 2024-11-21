@@ -10,7 +10,7 @@ measures_num = 10*2**2+1
 
 layers = 3
 P_half = uf.P_a(a=0.5)
-sequence = uf.get_seq(measures_num=measures_num, points_num=points_num)
+sequence = uf.get_seq_2(measures_num=measures_num, points_num=points_num)
 probabilities = ot.unif(points_num)
 
 pyramid = uf.pyramid_decomposition(sequence=sequence,

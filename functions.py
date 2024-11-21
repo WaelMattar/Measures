@@ -50,6 +50,25 @@ def get_seq(measures_num: int = 512, points_num: int = 100):
     return np.stack(z)  # np.array(measures_num, points_num, dimension)
 
 
+def get_seq_2(measures_num: int = 512, points_num: int = 100):
+    sequence = np.zeros(shape=(measures_num, points_num, 2))
+
+    for i in range(points_num):
+        sequence[:, i, 0] = np.linspace(-np.pi, np.pi, measures_num) + 0.0005*(i+1)
+
+    sequence[:, 0, 1] = np.cos(sequence[:, 0, 0])
+    sequence[:, 1, 1] = np.pi - np.abs(sequence[:, 1, 0])
+    sequence[:, 2, 1] = 0.6*np.sin(sequence[:, 2, 0]) + 0.5*np.cos(2*sequence[:, 2, 0]) - 0.25*np.sin(4*sequence[:, 2, 0]) - 2
+
+    # sorting each measure with respect to the first coordinate
+    z = []
+    for i in range(measures_num):
+        y = sequence[i]
+        y.sort(axis=0)
+        z.append(y)
+    return np.stack(z)  # np.array(measures_num, points_num, dimension)
+
+
 def show_seq(sequence: np.ndarray, increments: float = 0):
     plt.figure(figsize=(8, 6), num=999)
     for i in range(sequence.shape[0]):
