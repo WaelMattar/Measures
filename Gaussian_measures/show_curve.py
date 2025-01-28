@@ -1,4 +1,4 @@
-import AC_measures.functions as uf
+import Gaussian_measures.functions as uf
 import numpy as np
 
 num_of_samples = 17

@@ -1,4 +1,4 @@
-import AC_measures.functions as uf
+import Gaussian_measures.functions as uf
 import matplotlib.pyplot as plt
 import numpy as np
 
