@@ -10,5 +10,4 @@ curve = uf.one_dimensional_normal_curve(num_of_samples=num_of_samples)
 endpoints = np.vstack((curve[0, :], curve[-1, :]))
 geodesic = uf.elementary_normal_refinement_multiple_times(endpoints, times=num_of_refinements)
 
-plt.figure(num=0)
 uf.show_one_dimensional_normal_curve(domain=x, curve=geodesic, alpha=1)

@@ -17,7 +17,7 @@ def one_dimensional_normal_curve(num_of_samples: int):
 
 def show_one_dimensional_normal_curve(domain: np.ndarray, curve: np.ndarray, alpha: float):
     means, sigmas = curve[:, 0], curve[:, 1]
-    plt.figure(num=0, figsize=(10, 6))
+    plt.figure(num=0, figsize=(8, 6))
     N = len(means)
     colors = plt.cm.jet(np.linspace(0, 1, N))
     for i in range(len(means)):
