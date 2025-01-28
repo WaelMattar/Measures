@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import ot
+import matplotlib.cm as cm
+import sympy
 
 plt.rcParams["font.family"] = "Times New Roman"
 plt.rcParams['image.composite_image'] = False
@@ -17,11 +18,14 @@ def one_dimensional_normal_curve(num_of_samples: int):
 def show_one_dimensional_normal_curve(domain: np.ndarray, curve: np.ndarray, alpha: float):
     means, sigmas = curve[:, 0], curve[:, 1]
     plt.figure(num=0, figsize=(10, 6))
+    N = len(means)
+    colors = plt.cm.jet(np.linspace(0, 1, N))
     for i in range(len(means)):
         y = 1 / (2 * np.pi * sigmas[i] ** 2) * np.exp(-((domain - means[i]) ** 2) / (2 * sigmas[i] ** 2))
-        plt.plot(domain, y, color=(i/len(means), 0, 1 - i/len(means)), linewidth=3, alpha=alpha)
+        plt.plot(domain, y, color=colors[i], linewidth=3, alpha=alpha)
     plt.xticks(size=16)
     plt.yticks([])
+    plt.savefig('Figures/curve.pdf', format='pdf', bbox_inches='tight')
     plt.show()
 
 
@@ -50,3 +54,59 @@ def elementary_normal_refinement_multiple_times(curve: np.ndarray, times: int):
     for _ in range(times):
         refined_curve = elementary_normal_refinement(curve=refined_curve)
     return refined_curve
+
+
+def downsampling(curve: np.ndarray):
+    new_curve = curve.copy()
+    return np.delete(new_curve, obj=[2*k+1 for k in range(int(new_curve.shape[0]/2))], axis=0)
+
+
+def normal_o_minus(measure_0: np.ndarray, measure_1: np.ndarray):
+    mean_0, sigma_0 = measure_0[0], measure_0[1]
+    mean_1, sigma_1 = measure_1[0], measure_1[1]
+    x = sympy.Symbol('x')
+    f = mean_1 + np.sqrt(sigma_1/sigma_0)*(x - mean_0) - x  # f.subs('x', 0)
+    return f
+
+
+def normal_wasserstein_distance(measure_0: np.ndarray, measure_1: np.ndarray):
+    mean_0, sigma_0 = measure_0[0], measure_0[1]
+    mean_1, sigma_1 = measure_1[0], measure_1[1]
+    return np.abs(mean_0 - mean_1) + sigma_0 + sigma_1 - 2*np.sqrt(sigma_0*sigma_1)
+
+
+def decomposition(curve: np.ndarray):
+    down = downsampling(curve)
+    ref = elementary_normal_refinement(curve=down)
+    details = [normal_o_minus(measure_0=curve[k, :], measure_1=ref[k, :]) for k in range(ref.shape[0])]
+    return [down, details]
+
+
+def decomposition_norms(curve: np.ndarray):
+    down = downsampling(curve)
+    ref = elementary_normal_refinement(curve=down)
+    details = [normal_wasserstein_distance(measure_0=curve[k, :], measure_1=ref[k, :]) for k in range(ref.shape[0])]
+    return [down, details]
+
+
+def elementary_normal_multiscale_transform(curve: np.ndarray, levels: int):
+    pyramid = []
+    coarse = curve.copy()
+    for _ in range(levels):
+        temporary = decomposition(curve=coarse)
+        coarse = temporary[0]
+        details = temporary[1]
+        pyramid.insert(0, details)
+    pyramid.insert(0, coarse)
+    return pyramid
+
+
+def elementary_normal_multiscale_transform_norms(curve: np.ndarray, levels: int):
+    pyramid = []
+    coarse = curve.copy()
+    for _ in range(levels):
+        temporary = decomposition_norms(curve=coarse)
+        coarse = temporary[0]
+        details = temporary[1]
+        pyramid.insert(0, details)
+    return pyramid
