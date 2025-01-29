@@ -20,9 +20,10 @@ def one_dimensional_normal_curve_noise(num_of_samples: int):
     sigmas = 0.4 - 1 * (sigmas - 0.46) ** 2
     means = np.linspace(0, 1, num=num_of_samples)
     noise = np.random.normal(0, 1, num_of_samples)
-    regularized_noise = np.array([noise[i]*(i/num_of_samples)*(1-i/num_of_samples) for i in range(num_of_samples)])
-    means = means + 0.5*regularized_noise
-    sigmas = sigmas + 0.01*regularized_noise
+    regularized_mean_noise = np.array([noise[i]*(i/(num_of_samples-1))*(1-i/(num_of_samples-1)) for i in range(num_of_samples)])
+    regularized_sigma_noise = np.array([noise[i]*np.exp(-10*np.abs(i/(num_of_samples-1)-0.5)) for i in range(num_of_samples)])
+    means = means + 0.5*regularized_mean_noise
+    sigmas = sigmas + 0.01*regularized_sigma_noise
     return np.transpose(np.vstack((means, sigmas)))
 
 
