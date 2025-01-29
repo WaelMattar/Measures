@@ -8,14 +8,15 @@ import numpy as np
 level_of_sampling = 7
 decomposition_levels = 5
 num_of_samples = 2**level_of_sampling + 1
-curve = uf.one_dimensional_normal_curve(num_of_samples=num_of_samples)
+curve = uf.one_dimensional_normal_curve_noise(num_of_samples=num_of_samples)
 
 # show curve
-uf.show_one_dimensional_normal_curve(domain=np.linspace(-1, 2, 200), curve=curve, alpha=1, save_as='curve')
+uf.show_one_dimensional_normal_curve(domain=np.linspace(-1, 2, 200), curve=curve, alpha=1, save_as='curve_with_noise')
 
 # pyramid transform
 pyramid = uf.elementary_normal_multiscale_transform(curve=curve, levels=decomposition_levels)
 pyramid_norms = uf.elementary_normal_multiscale_transform_norms(curve=curve, levels=decomposition_levels)
+
 
 # plot
 fig, axs = plt.subplots(decomposition_levels, 1, sharex=True)
@@ -30,5 +31,5 @@ for layer, k in zip(pyramid_norms, range(decomposition_levels)):
 
 axs[0].yaxis.set_major_formatter(ticker.StrMethodFormatter("{x:.4f}"))
 axs[1].yaxis.set_major_formatter(ticker.StrMethodFormatter("{x:.4f}"))
-plt.savefig('Figures/pyramid.pdf', format='pdf', bbox_inches='tight')
+plt.savefig('Figures/pyramid_with_noise.pdf', format='pdf', bbox_inches='tight')
 plt.show()

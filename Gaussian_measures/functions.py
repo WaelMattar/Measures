@@ -15,7 +15,18 @@ def one_dimensional_normal_curve(num_of_samples: int):
     return np.transpose(np.vstack((means, sigmas)))
 
 
-def show_one_dimensional_normal_curve(domain: np.ndarray, curve: np.ndarray, alpha: float):
+def one_dimensional_normal_curve_noise(num_of_samples: int):
+    sigmas = np.linspace(0, 1, num=num_of_samples)
+    sigmas = 0.4 - 1 * (sigmas - 0.46) ** 2
+    means = np.linspace(0, 1, num=num_of_samples)
+    noise = np.random.normal(0, 1, num_of_samples)
+    regularized_noise = np.array([noise[i]*(i/num_of_samples)*(1-i/num_of_samples) for i in range(num_of_samples)])
+    means = means + 0.5*regularized_noise
+    sigmas = sigmas + 0.01*regularized_noise
+    return np.transpose(np.vstack((means, sigmas)))
+
+
+def show_one_dimensional_normal_curve(domain: np.ndarray, curve: np.ndarray, alpha: float, save_as: str):
     means, sigmas = curve[:, 0], curve[:, 1]
     plt.figure(num=0, figsize=(8, 6))
     N = len(means)
@@ -25,7 +36,7 @@ def show_one_dimensional_normal_curve(domain: np.ndarray, curve: np.ndarray, alp
         plt.plot(domain, y, color=colors[i], linewidth=3, alpha=alpha)
     plt.xticks(size=16)
     plt.yticks([])
-    plt.savefig('Figures/curve.pdf', format='pdf', bbox_inches='tight')
+    plt.savefig('Figures/'+save_as+'.pdf', format='pdf', bbox_inches='tight')
     plt.show()
 
 
