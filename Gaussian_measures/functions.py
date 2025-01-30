@@ -1,6 +1,5 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import matplotlib.cm as cm
 import sympy
 
 plt.rcParams["font.family"] = "Times New Roman"
@@ -27,14 +26,6 @@ def one_dimensional_normal_curve_noise(num_of_samples: int):
     return np.transpose(np.vstack((means, sigmas)))
 
 
-def add_noise(curve: np.ndarray, noise_level: float):
-    num_of_samples = curve.shape[0]
-    noise = np.random.normal(0, 1, num_of_samples)
-    curve[:, 0] = curve[:, 0] + noise_level*noise
-    curve[:, 1] = curve[:, 1] + noise_level*noise
-    return curve
-
-
 def show_one_dimensional_normal_curve(domain: np.ndarray, curve: np.ndarray, alpha: float, save_as: str):
     means, sigmas = curve[:, 0], curve[:, 1]
     plt.figure(num=0, figsize=(8, 6))
@@ -42,7 +33,7 @@ def show_one_dimensional_normal_curve(domain: np.ndarray, curve: np.ndarray, alp
     colors = plt.cm.jet(np.linspace(0, 1, N))
     for i in range(len(means)):
         y = 1 / (2 * np.pi * sigmas[i] ** 2) * np.exp(-((domain - means[i]) ** 2) / (2 * sigmas[i] ** 2))
-        plt.plot(domain, y, color=colors[i], linewidth=3, alpha=alpha)
+        plt.plot(domain, y, color=colors[i], linewidth=2, alpha=alpha)
     plt.xticks(size=16)
     plt.yticks([])
     plt.savefig('Figures/'+save_as+'.pdf', format='pdf', bbox_inches='tight')
