@@ -5,9 +5,9 @@ from matplotlib import ticker
 import numpy as np
 
 # setting
-level_of_sampling = 7
+level_of_sampling = 5
 decomposition_levels = 5
-num_of_samples = 2**level_of_sampling + 1
+num_of_samples = 10*2**(level_of_sampling-1) + 1
 curve = uf.one_dimensional_normal_curve_noise(num_of_samples=num_of_samples)
 
 # show curve

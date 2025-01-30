@@ -22,9 +22,17 @@ def one_dimensional_normal_curve_noise(num_of_samples: int):
     noise = np.random.normal(0, 1, num_of_samples)
     regularized_mean_noise = np.array([noise[i]*(i/(num_of_samples-1))*(1-i/(num_of_samples-1)) for i in range(num_of_samples)])
     regularized_sigma_noise = np.array([noise[i]*np.exp(-10*np.abs(i/(num_of_samples-1)-0.5)) for i in range(num_of_samples)])
-    means = means + 0.5*regularized_mean_noise
-    sigmas = sigmas + 0.01*regularized_sigma_noise
+    means = means + 0.2*regularized_mean_noise
+    sigmas = sigmas + 0.02*regularized_sigma_noise
     return np.transpose(np.vstack((means, sigmas)))
+
+
+def add_noise(curve: np.ndarray, noise_level: float):
+    num_of_samples = curve.shape[0]
+    noise = np.random.normal(0, 1, num_of_samples)
+    curve[:, 0] = curve[:, 0] + noise_level*noise
+    curve[:, 1] = curve[:, 1] + noise_level*noise
+    return curve
 
 
 def show_one_dimensional_normal_curve(domain: np.ndarray, curve: np.ndarray, alpha: float, save_as: str):
