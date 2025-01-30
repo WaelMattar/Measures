@@ -19,7 +19,7 @@ delta = np.max(diff)
 Gamma = delta/(1/(num_of_samples-1))
 
 # plot max norms
-plt.figure(num=2, figsize=(10, 6))
+plt.figure(num=2, figsize=(8, 6))
 for k in np.linspace(0, 1, 5):
     average = k*curve + (1-k)*geodesic
     # uf.show_one_dimensional_normal_curve(domain=np.linspace(-1, 2, 200), curve=average, alpha=1, save_as='average_'+str(k))

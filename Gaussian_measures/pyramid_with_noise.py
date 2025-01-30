@@ -6,7 +6,7 @@ import numpy as np
 
 # setting
 level_of_sampling = 5
-decomposition_levels = 5
+decomposition_levels = 4
 num_of_samples = 10*2**(level_of_sampling-1) + 1
 curve = uf.one_dimensional_normal_curve_noise(num_of_samples=num_of_samples)
 
@@ -24,9 +24,9 @@ fig.subplots_adjust(hspace=0.5)
 for layer, k in zip(pyramid_norms, range(decomposition_levels)):
     points = np.linspace(0, 1, len(layer))
     axs[k].scatter(points, pyramid_norms[k], c=points, cmap=cm.get_cmap('jet'), s=30, edgecolors='k')
-    axs[k].set_yticks([0, np.max(pyramid_norms[k])], fontsize=16)
+    axs[k].set_yticks([0, np.max(pyramid_norms[k])], fontsize=25)
     axs[k].set_ylim([-np.min(pyramid_norms[k]), np.max(pyramid_norms[k])*1.1])
-    axs[k].set_xticks(np.linspace(0, 1, 11), fontsize=16)
+    axs[k].set_xticks(np.linspace(0, 1, 11), fontsize=25)
     axs[k].spines[['right', 'top']].set_visible(False)
 
 axs[0].yaxis.set_major_formatter(ticker.StrMethodFormatter("{x:.4f}"))
