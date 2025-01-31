@@ -38,13 +38,14 @@ plt.yticks(fontsize=16)
 plt.savefig('Figures/details_decay.pdf', format='pdf', bbox_inches='tight')
 plt.show()
 
-# average plotting
-level_of_sampling = 5
-decomposition_levels = 5
+# average plotting and print optimality
+level_of_sampling = 6
+decomposition_levels = 6
 num_of_samples = 10*2**(level_of_sampling-1) + 1
 endpoints = uf.one_dimensional_normal_curve(num_of_samples=2)
 geodesic = uf.elementary_normal_refinement_multiple_times(curve=endpoints, times=decomposition_levels+1)
 curve = uf.one_dimensional_normal_curve(num_of_samples=len(geodesic))
 for k in np.linspace(0, 1, 5):
     average = k*curve + (1-k)*geodesic
+    print('For k = {} the optimality number is {}.'.format(k, uf.elementary_curve_optimality(curve=average, levels=decomposition_levels)))
     uf.show_one_dimensional_normal_curve(domain=np.linspace(-1, 2, 200), curve=average, alpha=1, save_as='average_'+str(k))
