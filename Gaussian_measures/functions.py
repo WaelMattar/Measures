@@ -83,7 +83,7 @@ def normal_o_minus(measure_0: np.ndarray, measure_1: np.ndarray):
 def normal_wasserstein_distance(measure_0: np.ndarray, measure_1: np.ndarray):
     mean_0, sigma_0 = measure_0[0], measure_0[1]
     mean_1, sigma_1 = measure_1[0], measure_1[1]
-    return np.abs(mean_0 - mean_1) + sigma_0 + sigma_1 - 2*np.sqrt(sigma_0*sigma_1)
+    return np.sqrt(np.abs(mean_0 - mean_1)**2 + sigma_0 + sigma_1 - 2*np.sqrt(sigma_0*sigma_1))
 
 
 def decomposition(curve: np.ndarray):
@@ -125,5 +125,5 @@ def elementary_normal_multiscale_transform_norms(curve: np.ndarray, levels: int)
 
 def elementary_curve_optimality(curve: np.ndarray, levels: int):
     norm_pyramid = elementary_normal_multiscale_transform_norms(curve=curve, levels=levels)
-    sums = [np.sum(norm_pyramid[i])*2**i for i in range(len(norm_pyramid))]
+    sums = [np.sum(norm_pyramid[i])*2**(i+1) for i in range(len(norm_pyramid))]
     return np.sum(sums)

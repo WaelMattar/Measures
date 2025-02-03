@@ -22,12 +22,13 @@ Gamma = delta/(1/(num_of_samples-1))
 plt.figure(num=2, figsize=(8, 6))
 for k in np.linspace(0, 1, 5):
     average = k*curve + (1-k)*geodesic
-    # uf.show_one_dimensional_normal_curve(domain=np.linspace(-1, 2, 200), curve=average, alpha=1, save_as='average_'+str(k))
     pyramid_norms = uf.elementary_normal_multiscale_transform_norms(curve=average, levels=decomposition_levels)
     error = [np.max(np.abs(pyramid_norms[i])) for i in range(decomposition_levels)]
     error = [error[i] if error[i] != 0 else 2**(-30) for i in range(len(error))]
     plt.plot(np.linspace(1, decomposition_levels, decomposition_levels), np.log2(error), linewidth=3, label=r'k = {}'.format(k))
     plt.scatter(np.linspace(1, decomposition_levels, decomposition_levels), np.log2(error))
+    plt.ylabel(r'$\log_2 || d^{(\ell)} ||_\infty$', fontsize=16)
+    plt.xlabel(r'level of details $\ell$', fontsize=16)
 
 # plot theoretical bound
 # plt.plot(np.linspace(1, decomposition_levels, decomposition_levels),
