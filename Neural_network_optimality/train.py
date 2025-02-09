@@ -1,11 +1,14 @@
 import numpy as np
 import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
 import keras
 from keras import layers
 from keras.datasets import mnist
 from keras.callbacks import Callback
 from keras.utils import to_categorical
 from keras.utils.layer_utils import count_params
+from keras.optimizers import Adam
 
 
 # Predictions
@@ -70,10 +73,13 @@ model = keras.Sequential(
 trainable_count = count_params(model.trainable_weights)
 model.summary()
 
+# Optimizer
+opt = Adam(learning_rate=1e-5)
+
 # Training configuration
-batch_size = 2048
-epochs = 21
-model.compile(loss="categorical_crossentropy", optimizer="adam", metrics=["accuracy"])
+batch_size = 128
+epochs = 200
+model.compile(loss="categorical_crossentropy", optimizer=opt, metrics=["accuracy"])
 
 # Train model
 measures_instance = Measures(x_test=x_test, y_test=y_test, digit=digit)
@@ -92,3 +98,7 @@ hist_df = pd.DataFrame(history.history)
 hist_csv_file = 'Training_history/'+string
 with open(hist_csv_file, mode='w') as f:
     hist_df.to_csv(f)
+
+# Plot heatmap
+sns.heatmap(df, cmap='seismic')
+plt.show()
