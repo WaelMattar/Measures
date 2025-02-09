@@ -71,7 +71,7 @@ trainable_count = count_params(model.trainable_weights)
 model.summary()
 
 # Training configuration
-batch_size = 128
+batch_size = 2048
 epochs = 21
 model.compile(loss="categorical_crossentropy", optimizer="adam", metrics=["accuracy"])
 
@@ -80,12 +80,15 @@ measures_instance = Measures(x_test=x_test, y_test=y_test, digit=digit)
 history = model.fit(x_train, y_train, batch_size=batch_size, epochs=epochs, callbacks=[measures_instance])
 results = measures_instance.get_measures()
 
+# Experiment details
+string = 'measures_for_digit_{}_with_{}_epochs_{}_batch_and_{}_weights.csv'.format(digit, epochs, batch_size, trainable_count)
+
 # Save measures sequence
 df = pd.DataFrame(results)
-df.to_csv('Measures_results/measures_for_digit_{}_with_{}_epochs_and_{}_weights.csv'.format(digit, epochs, trainable_count), index=False)
+df.to_csv('Measures_results/'+string, index=False)
 
 # Save training history
 hist_df = pd.DataFrame(history.history)
-hist_csv_file = 'Training_history/history_for_digit_{}_with_{}_epochs_and_{}_weights.csv'.format(digit, epochs, trainable_count)
+hist_csv_file = 'Training_history/'+string
 with open(hist_csv_file, mode='w') as f:
     hist_df.to_csv(f)
