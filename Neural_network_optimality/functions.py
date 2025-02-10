@@ -15,6 +15,10 @@ class P_weight:
 
         X = np.linspace(0, 9, 10, dtype=int).tolist()
 
+        if np.abs(np.sum(a) - np.sum(b)) >= 10 ** (-6):
+            a = a / np.sum(a, dtype=np.float64)
+            b = b / np.sum(b, dtype=np.float64)
+
         # calculating the coupling matrix
         G2 = ot.emd_1d(X, X, a=a.tolist(), b=b.tolist(), metric='sqeuclidean')
 
@@ -59,6 +63,9 @@ def linear_interpolation_refinement_multiple_times(curve: np.ndarray, times: int
 
 def o_minus(a: np.ndarray, b: np.ndarray):  # TODO: fix the subtraction
     X = np.linspace(0, 9, 10, dtype=int).tolist()
+    if np.abs(np.sum(a) - np.sum(b)) >= 10 ** (-6):
+        a = a / np.sum(a, dtype=np.float64)
+        b = b / np.sum(b, dtype=np.float64)
     G2 = ot.emd_1d(X, X, a=a.tolist(), b=b.tolist(), metric='sqeuclidean')
     return G2
 
@@ -69,6 +76,9 @@ def o_plus(b: np.array, coupling_matrix: np.ndarray):  # TODO:finish
 
 def wasserstein_distance(a: np.ndarray, b: np.ndarray):
     X = np.linspace(0, 9, 10, dtype=int).tolist()
+    if np.abs(np.sum(a) - np.sum(b)) >= 10 ** (-6):
+        a = a / np.sum(a, dtype=np.float64)
+        b = b / np.sum(b, dtype=np.float64)
     return np.sqrt(ot.emd2_1d(X, X, a=a.tolist(), b=b.tolist(), metric='sqeuclidean'))
 
 
@@ -113,3 +123,10 @@ def elementary_curve_optimality(curve: np.ndarray, levels: int):
     norm_pyramid = elementary_multiscale_transform_norms(curve=curve, levels=levels)
     sums = [np.sum(norm_pyramid[i])*2**(i+1) for i in range(len(norm_pyramid))]
     return np.sum(sums)
+
+
+def curve_decay_rate(curve: np.ndarray, levels: int):
+    norm_pyramid = elementary_multiscale_transform_norms(curve=curve, levels=levels)
+    maximums = np.array([np.max(norm_pyramid[i]) for i in range(len(norm_pyramid))])
+    ratios = maximums[:-1] / maximums[1:]
+    return np.mean(ratios)
