@@ -12,7 +12,7 @@ for size in sizes:
     string = 'measures_for_digit_3_with_99_epochs_128_batch_and_{}_weights.csv'.format(size)
     df = pd.read_csv('Measures_results/'+string)
     measures = np.array(df)
-    o = uf.curve_decay_rate(curve=measures, levels=5)
+    o = uf.elementary_curve_optimality(curve=measures, levels=5)
     optimality.append(o)
 
 plt.figure(num=1, figsize=(8, 6))
