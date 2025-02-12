@@ -61,17 +61,18 @@ def linear_interpolation_refinement_multiple_times(curve: np.ndarray, times: int
     return refined_curve
 
 
-def o_minus(a: np.ndarray, b: np.ndarray):  # TODO: fix the subtraction
+def o_minus(a: np.ndarray, b: np.ndarray):  # a ominus b
     X = np.linspace(0, 9, 10, dtype=int).tolist()
     if np.abs(np.sum(a) - np.sum(b)) >= 10 ** (-6):
         a = a / np.sum(a, dtype=np.float64)
         b = b / np.sum(b, dtype=np.float64)
     G2 = ot.emd_1d(X, X, a=a.tolist(), b=b.tolist(), metric='sqeuclidean')
-    return G2
+    return G2 - np.diag(v=b)
 
 
-def o_plus(b: np.array, coupling_matrix: np.ndarray):  # TODO:finish
-    return
+def o_plus(b: np.array, detail_coeff: np.ndarray):
+    coupling = detail_coeff + np.diag(v=b)
+    return np.sum(coupling, axis=1)
 
 
 def wasserstein_distance(a: np.ndarray, b: np.ndarray):
@@ -106,6 +107,15 @@ def elementary_multiscale_transform(curve: np.ndarray, levels: int):
         pyramid.insert(0, details)
     pyramid.insert(0, coarse)
     return pyramid
+
+
+def inverse_multiscale_transform(pyramid: list):
+    levels = len(pyramid)
+    temp = pyramid[0]
+    for level in range(levels-1):
+        refinement = linear_interpolation_refinement(curve=temp)
+        temp = np.array([o_plus(b=refinement[i], detail_coeff=pyramid[level+1][i]) for i in range(len(refinement))])
+    return temp
 
 
 def elementary_multiscale_transform_norms(curve: np.ndarray, levels: int):

@@ -20,6 +20,7 @@ measures = pd.read_csv('Measures_results/'+file_name)
 measures = np.array(measures)
 
 pyramid = uf.elementary_multiscale_transform(curve=measures, levels=decomposition_levels)
+reconstruction = uf.inverse_multiscale_transform(pyramid=pyramid)
 pyramid_norms = uf.elementary_multiscale_transform_norms(curve=measures, levels=decomposition_levels)
 
 fig, axs = plt.subplots(decomposition_levels, 1, sharex=True)
