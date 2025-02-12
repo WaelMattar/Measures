@@ -72,12 +72,22 @@ def downsampling(curve: np.ndarray):
     return np.delete(new_curve, obj=[2*k+1 for k in range(int(new_curve.shape[0]/2))], axis=0)
 
 
-def normal_o_minus(measure_0: np.ndarray, measure_1: np.ndarray):
+def normal_o_minus(measure_0: np.ndarray, measure_1: np.ndarray):  # measure_0 ominus measure_1
     mean_0, sigma_0 = measure_0[0], measure_0[1]
     mean_1, sigma_1 = measure_1[0], measure_1[1]
     x = sympy.Symbol('x')
     f = mean_1 + np.sqrt(sigma_1/sigma_0)*(x - mean_0) - x  # f.subs('x', 0)
     return f
+
+
+def normal_o_plus(measure_1: np.ndarray, f):
+    x = sympy.Symbol('x')
+    OT = f + x
+    free = OT.subs('x', 0)
+    gradient = OT.subs('x', 1) - OT.subs('x', 0)
+    sigma_0 = measure_1[1] / (gradient**2)
+    mean_0 = np.sqrt(np.float64(sigma_0/measure_1[1]))*(measure_1[0]-free)
+    return np.array([mean_0, sigma_0], dtype=np.float64)
 
 
 def normal_wasserstein_distance(measure_0: np.ndarray, measure_1: np.ndarray):
