@@ -146,3 +146,12 @@ def elementary_curve_optimality(curve: np.ndarray, levels: int):
     norm_pyramid = elementary_normal_multiscale_transform_norms(curve=curve, levels=levels)
     sums = [np.sum(norm_pyramid[i])*2**(i+1) for i in range(len(norm_pyramid))]
     return np.sum(sums)
+
+
+def pyramid_thresholding(pyramid: list, pyramid_norms: list, threshold: float):
+    levels = len(pyramid)
+    x = sympy.Symbol('x')
+    zero = x-x
+    for i in range(1, levels):
+        pyramid[i] = [pyramid[i][k] if pyramid_norms[i-1][k] <= threshold else zero for k in range(len(pyramid[i]))]
+    return pyramid
