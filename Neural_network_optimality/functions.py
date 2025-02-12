@@ -121,7 +121,7 @@ def elementary_multiscale_transform_norms(curve: np.ndarray, levels: int):
 
 def elementary_curve_optimality(curve: np.ndarray, levels: int):
     norm_pyramid = elementary_multiscale_transform_norms(curve=curve, levels=levels)
-    sums = [np.sum(norm_pyramid[i])*2**(i+1) for i in range(len(norm_pyramid))]
+    sums = [np.sum(norm_pyramid[i]) for i in range(len(norm_pyramid))]
     return np.sum(sums)
 
 
