@@ -122,6 +122,15 @@ def elementary_normal_multiscale_transform(curve: np.ndarray, levels: int):
     return pyramid
 
 
+def inverse_normal_multiscale_transform(pyramid: list):
+    levels = len(pyramid)
+    temp = pyramid[0]
+    for level in range(levels - 1):
+        refinement = elementary_normal_refinement(curve=temp)
+        temp = np.array([normal_o_plus(measure_1=refinement[i], f=pyramid[level + 1][i]) for i in range(len(refinement))])
+    return temp
+
+
 def elementary_normal_multiscale_transform_norms(curve: np.ndarray, levels: int):
     pyramid = []
     coarse = curve.copy()

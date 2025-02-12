@@ -15,6 +15,8 @@ uf.show_one_dimensional_normal_curve(domain=np.linspace(-1, 2, 200), curve=curve
 
 # pyramid transform
 pyramid = uf.elementary_normal_multiscale_transform(curve=curve, levels=decomposition_levels)
+reconstructed_curve = uf.inverse_normal_multiscale_transform(pyramid=pyramid)
+print('Error = {}'.format(np.linalg.norm(reconstructed_curve-curve)))
 pyramid_norms = uf.elementary_normal_multiscale_transform_norms(curve=curve, levels=decomposition_levels)
 
 # plot
