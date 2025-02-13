@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import math
 import sympy
 
 plt.rcParams["font.family"] = "Times New Roman"
@@ -93,7 +94,7 @@ def normal_o_plus(measure_1: np.ndarray, f):
 def normal_wasserstein_distance(measure_0: np.ndarray, measure_1: np.ndarray):
     mean_0, sigma_0 = measure_0[0], measure_0[1]
     mean_1, sigma_1 = measure_1[0], measure_1[1]
-    return np.sqrt(np.abs(mean_0 - mean_1)**2 + sigma_0 + sigma_1 - 2*np.sqrt(sigma_0*sigma_1))
+    return math.sqrt(np.abs(mean_0 - mean_1)**2 + (math.sqrt(sigma_0) - math.sqrt(sigma_1))**2)
 
 
 def decomposition(curve: np.ndarray):
