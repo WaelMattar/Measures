@@ -25,13 +25,13 @@ class P_weight:
         A = np.matrix.nonzero(G2)
         A = [list(A[0]), list(A[1])]
 
-        # calculate the new density
+        # calculate the new distribution
         X = []
         for i in zip(A[0], A[1]):
-            X.append(self.a * X_mu[i[0], :] + (1-self.a) * X_nu[i[1], :])
+            X.append(self.weight * X_mu[i[0], :] + (1-self.weight) * X_nu[i[1], :])
 
         X = np.reshape(X, (-1, 2))
-        return G2, A, X  # return coupling matrix, indices of nonzero entries, and new density points
+        return G2, X
 
 
 def get_curve(number_of_points: int = 10, number_of_samples: int = 160):
@@ -62,18 +62,20 @@ def get_curve(number_of_points: int = 10, number_of_samples: int = 160):
 
 
 def downsampling(curve: np.ndarray):
-    new_curve = curve.copy()
-    return np.delete(new_curve, obj=[2*k+1 for k in range(int(new_curve.shape[0]/2))], axis=0)
+    down = [curve[2*k] for k in range(int(len(curve)/2)+1)]
+    return down
 
 
 def linear_interpolation_refinement(curve: np.ndarray):
     P_half = P_weight(weight=0.5)
-    L = curve.shape[0] - 1
-    new_curve = curve[0, :]
+    L = len(curve) - 1
+    new_curve = [curve[0]]
+    m_mu = np.ones(curve[0].shape[0]) / curve[0].shape[0]
+    m_nu = np.ones(curve[0].shape[0]) / curve[0].shape[0]
     for i in range(L):
-        _, new_measure = P_half(a=curve[i, :], b=curve[i+1, :])
-        new_curve = np.vstack((new_curve, new_measure))
-        new_curve = np.vstack((new_curve, curve[i+1, :]))
+        _, new_cloud = P_half(m_mu=m_mu, X_mu=curve[i], m_nu=m_nu, X_nu=curve[i+1])
+        new_curve.append(new_cloud)
+        new_curve.append(curve[i+1])
     return new_curve
 
 
@@ -85,17 +87,24 @@ def linear_interpolation_refinement_multiple_times(curve: np.ndarray, times: int
 
 
 def o_minus(a: np.ndarray, b: np.ndarray):  # a ominus b
-    X = np.linspace(0, 9, 10, dtype=int).tolist()
-    if np.abs(np.sum(a) - np.sum(b)) >= 10 ** (-6):
-        a = a / np.sum(a, dtype=np.float64)
-        b = b / np.sum(b, dtype=np.float64)
-    G2 = ot.emd_1d(X, X, a=a.tolist(), b=b.tolist(), metric='sqeuclidean')
-    return G2 - np.diag(v=b)
+    m_mu = np.ones(a.shape[0]) / a.shape[0]
+    m_nu = np.ones(b.shape[0]) / b.shape[0]
+    M2 = ot.dist(a, b, metric='sqeuclidean')
+    M2 /= M2.max()
+    G2 = ot.emd(m_mu, m_nu, M2)
+    A = np.matrix.nonzero(G2)
+    res = []
+    for k, j in zip(A[0], A[1]):
+        res.append([k, j, np.subtract(b[j], a[k])])
+    return res
 
 
-def o_plus(b: np.array, detail_coeff: np.ndarray):
-    coupling = detail_coeff + np.diag(v=b)
-    return np.sum(coupling, axis=1)
+def o_plus(b: np.ndarray, detail_coeff: list):
+    a = b.copy()
+    for vec in detail_coeff:
+        k, j, diff = vec
+        a[k] = b[j] + (-1)*diff  # pullback to a
+    return a
 
 
 def wasserstein_distance(a: np.ndarray, b: np.ndarray):
