@@ -61,9 +61,9 @@ y_train = keras.utils.to_categorical(y_train, num_classes)
 model = keras.Sequential(
     [
         keras.Input(shape=input_shape),
-        layers.Conv2D(2, kernel_size=(3, 3), activation="relu"),
-        layers.MaxPooling2D(pool_size=(2, 2)),
         layers.Conv2D(4, kernel_size=(3, 3), activation="relu"),
+        layers.MaxPooling2D(pool_size=(2, 2)),
+        layers.Conv2D(8, kernel_size=(3, 3), activation="relu"),
         layers.MaxPooling2D(pool_size=(2, 2)),
         layers.Flatten(),
         layers.Dropout(0.5),
@@ -78,7 +78,7 @@ opt = Adam(learning_rate=1e-5)
 
 # Training configuration
 batch_size = 128
-epochs = 200
+epochs = 161
 model.compile(loss="categorical_crossentropy", optimizer=opt, metrics=["accuracy"])
 
 # Train model
@@ -101,4 +101,5 @@ with open(hist_csv_file, mode='w') as f:
 
 # Plot heatmap
 sns.heatmap(df, cmap='seismic')
+plt.savefig('Figures/heat_map.pdf', format='pdf', bbox_inches='tight')
 plt.show()
