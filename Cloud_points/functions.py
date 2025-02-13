@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import math
 import sympy
 import ot
 
@@ -61,12 +62,12 @@ def get_curve(number_of_points: int = 10, number_of_samples: int = 160):
     return curve
 
 
-def downsampling(curve: np.ndarray):
+def downsampling(curve: list):
     down = [curve[2*k] for k in range(int(len(curve)/2)+1)]
     return down
 
 
-def linear_interpolation_refinement(curve: np.ndarray):
+def linear_interpolation_refinement(curve: list):
     P_half = P_weight(weight=0.5)
     L = len(curve) - 1
     new_curve = [curve[0]]
@@ -108,28 +109,29 @@ def o_plus(b: np.ndarray, detail_coeff: list):
 
 
 def wasserstein_distance(a: np.ndarray, b: np.ndarray):
-    X = np.linspace(0, 9, 10, dtype=int).tolist()
-    if np.abs(np.sum(a) - np.sum(b)) >= 10 ** (-6):
-        a = a / np.sum(a, dtype=np.float64)
-        b = b / np.sum(b, dtype=np.float64)
-    return np.sqrt(ot.emd2_1d(X, X, a=a.tolist(), b=b.tolist(), metric='sqeuclidean'))
+    m_mu = np.ones(a.shape[0]) / a.shape[0]
+    m_nu = np.ones(b.shape[0]) / b.shape[0]
+    M2 = ot.dist(a, b, metric='sqeuclidean')
+    M2 /= M2.max()
+    G2 = ot.emd(m_mu, m_nu, M2)
+    return math.sqrt(np.sum(G2*M2))
 
 
-def decomposition(curve: np.ndarray):
+def decomposition(curve: list):
     down = downsampling(curve)
     ref = linear_interpolation_refinement(curve=down)
-    details = [o_minus(a=curve[k, :], b=ref[k, :]) for k in range(ref.shape[0])]
+    details = [o_minus(a=curve[k], b=ref[k]) for k in range(len(ref))]
     return [down, details]
 
 
-def decomposition_norms(curve: np.ndarray):
+def decomposition_norms(curve: list):
     down = downsampling(curve)
     ref = linear_interpolation_refinement(curve=down)
-    details = [wasserstein_distance(a=curve[k, :], b=ref[k, :]) for k in range(ref.shape[0])]
+    details = [wasserstein_distance(a=curve[k], b=ref[k]) for k in range(len(ref))]
     return [down, details]
 
 
-def elementary_multiscale_transform(curve: np.ndarray, levels: int):
+def elementary_multiscale_transform(curve: list, levels: int):
     pyramid = []
     coarse = curve.copy()
     for _ in range(levels):
@@ -146,7 +148,7 @@ def inverse_multiscale_transform(pyramid: list):
     temp = pyramid[0]
     for level in range(levels-1):
         refinement = linear_interpolation_refinement(curve=temp)
-        temp = np.array([o_plus(b=refinement[i], detail_coeff=pyramid[level+1][i]) for i in range(len(refinement))])
+        temp = [o_plus(b=refinement[i], detail_coeff=pyramid[level+1][i]) for i in range(len(refinement))]
     return temp
 
 
