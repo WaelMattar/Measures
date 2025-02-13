@@ -23,7 +23,7 @@ Ey = Y / ((X + 1) ** 2 + Y ** 2) - Y / ((X - 1) ** 2 + Y ** 2)
 
 # Depict illustration
 coarse = pyramid[0]
-plt.figure(figsize=(10, 10))
+plt.figure(figsize=(8, 6))
 plt.streamplot(X, Y, Ex, Ey, density=1, linewidth=.5, color='k')  # color='#A23BEC'
 plt.scatter(-1, 0, c='r', s=60)
 plt.scatter(1, 0, c='b', s=60)

@@ -15,10 +15,10 @@ X, Y = np.meshgrid(x, y)
 Ex = (X + 1) / ((X + 1) ** 2 + Y ** 2) - (X - 1) / ((X - 1) ** 2 + Y ** 2)
 Ey = Y / ((X + 1) ** 2 + Y ** 2) - Y / ((X - 1) ** 2 + Y ** 2)
 
-curve = uf.get_curve(number_of_points=10)
+curve = uf.get_curve(number_of_points=20)
 
 # Depict illustration
-plt.figure(figsize=(10, 10))
+plt.figure(figsize=(8, 6))
 plt.streamplot(X, Y, Ex, Ey, density=1, linewidth=.5, color='k')  # color='#A23BEC'
 plt.scatter(-1, 0, c='r', s=60)
 plt.scatter(1, 0, c='b', s=60)
