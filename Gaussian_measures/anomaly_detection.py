@@ -12,7 +12,7 @@ curve = uf.one_dimensional_normal_curve(num_of_samples=num_of_samples)
 
 # create anomalies
 abnormal_curve = curve.copy()
-abnormal_curve[70:90, 1] = 1/3 * abnormal_curve[70:90, 1]
+abnormal_curve[70:90, 1] = 1/2 * abnormal_curve[70:90, 1]
 # abnormal_curve[20:30, 1] = 1/1.03 * abnormal_curve[20:30, 1]
 # abnormal_curve[130:150, 1] = 1/1.03 * abnormal_curve[130:150, 1]
 
