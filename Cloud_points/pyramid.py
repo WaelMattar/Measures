@@ -24,14 +24,14 @@ Ey = Y / ((X + 1) ** 2 + Y ** 2) - Y / ((X - 1) ** 2 + Y ** 2)
 # Depict illustration
 coarse = pyramid[0]
 plt.figure(figsize=(8, 6))
-plt.streamplot(X, Y, Ex, Ey, density=1, linewidth=.5, color='k')  # color='#A23BEC'
+plt.streamplot(X, Y, Ex, Ey, density=1, linewidth=.3, color='k')  # color='#A23BEC'
 plt.scatter(-1, 0, c='r', s=60)
 plt.scatter(1, 0, c='b', s=60)
 for point_num in range(10):
     single_point_x = [coarse[k][point_num, 0] for k in range(len(coarse))]
     single_point_y = [coarse[k][point_num, 1] for k in range(len(coarse))]
     color_scheme = np.linspace(0, 1, len(coarse))
-    plt.scatter(single_point_x, single_point_y, c=color_scheme, cmap=cm.get_cmap('jet'), s=20)
+    plt.scatter(single_point_x, single_point_y, c=color_scheme, cmap=cm.get_cmap('jet'), s=40)
 plt.yticks(fontsize=16)
 plt.xticks(fontsize=16)
 
