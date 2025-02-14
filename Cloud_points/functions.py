@@ -41,7 +41,7 @@ def get_curve(number_of_points: int = 10, number_of_samples: int = 160):
     core = np.ones(shape=(number_of_points, 2))
     core[:, 0] = -3
     core[:, 1] = 1
-    initial_points = np.random.normal(0, 0.5, 20).reshape((number_of_points, 2))
+    initial_points = np.random.normal(0, 0.5, 20).reshape((number_of_points, 2))  # 0.2 for experiment 2
     initial_points = core + initial_points
 
     # Calculate curve

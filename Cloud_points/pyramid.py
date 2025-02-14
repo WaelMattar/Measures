@@ -43,11 +43,11 @@ plt.savefig('Figures/coarse_curve_electromagnetic.pdf', format='pdf', bbox_inche
 fig, axs = plt.subplots(decomposition_levels, 1, sharex=True)
 fig.subplots_adjust(hspace=0.5)
 for layer, k in zip(pyramid_norms, range(decomposition_levels)):
-    points = np.linspace(0, 1, len(layer))
+    points = np.linspace(0, 161, len(layer))
     axs[k].scatter(points, pyramid_norms[k], c=points, cmap=cm.get_cmap('jet'), s=30, edgecolors='k')
     axs[k].set_yticks([0, np.max(pyramid_norms[k])], fontsize=25)
     axs[k].set_ylim([-np.min(pyramid_norms[k]), np.max(pyramid_norms[k])*1.1])
-    axs[k].set_xticks(np.linspace(0, 1, 11), fontsize=25)
+    axs[k].set_xticks(np.linspace(0, 161, 11, dtype=int), fontsize=25)
     axs[k].spines[['right', 'top']].set_visible(False)
 
 plt.savefig('Figures/pyramid_electromagnetic.pdf', format='pdf', bbox_inches='tight')
