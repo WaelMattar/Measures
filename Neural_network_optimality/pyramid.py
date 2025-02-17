@@ -20,7 +20,7 @@ file_name = 'measures_for_digit_{}_with_{}_epochs_{}_batch_and_{}_weights.csv'.f
 measures = pd.read_csv('Measures_results/'+file_name)
 
 # heatmap
-ax = sns.heatmap(measures, cmap='plasma', xticklabels=np.linspace(0, 9, 10, dtype=int), linewidths=0)
+ax = sns.heatmap(measures, cmap='jet', xticklabels=np.linspace(0, 9, 10, dtype=int), linewidths=0)
 plt.savefig('Figures/heat_map.pdf', format='pdf', bbox_inches='tight')
 
 measures = np.array(measures)
@@ -32,7 +32,7 @@ fig, axs = plt.subplots(decomposition_levels, 1, sharex=True)
 fig.subplots_adjust(hspace=0.5)
 for layer, k in zip(pyramid_norms, range(decomposition_levels)):
     points = np.linspace(1, 161, len(layer), dtype=float)
-    axs[k].scatter(points, pyramid_norms[k], c=points, cmap=cm.get_cmap('plasma'), s=30, edgecolors='k')
+    axs[k].scatter(points, pyramid_norms[k], c=points, cmap=cm.get_cmap('jet'), s=30, edgecolors='k')
     axs[k].set_yticks([0, np.max(pyramid_norms[k])], fontsize=25)
     axs[k].set_ylim([-np.min(pyramid_norms[k]), np.max(pyramid_norms[k])*1.1])
     axs[k].set_xticks(np.linspace(1, 161, 11, dtype=int), fontsize=25)
