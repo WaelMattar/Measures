@@ -50,7 +50,7 @@ def get_curve(number_of_points: int = 10, number_of_samples: int = 640):
     y = sympy.Symbol('y')
     f_x = (x + 1) / pow(((x + 1) ** 2 + y ** 2), 3/2) - (x - 1) / pow(((x - 1) ** 2 + y ** 2), 3/2)
     f_y = y / pow(((x + 1) ** 2 + y ** 2), 3/2) - y / pow(((x - 1) ** 2 + y ** 2), 3/2)
-    delta_t = 0.2
+    delta_t = 0.281
     for k in range(number_of_samples):
         new_cloud = []
         for point_num in range(number_of_points):
