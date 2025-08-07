@@ -51,7 +51,7 @@ def get_curve(number_of_points: int = 10, number_of_samples: int = 640):
     f_x = (x + 1) / pow(((x + 1) ** 2 + y ** 2), 3/2) - (x - 1) / pow(((x - 1) ** 2 + y ** 2), 3/2)
     f_y = y / pow(((x + 1) ** 2 + y ** 2), 3/2) - y / pow(((x - 1) ** 2 + y ** 2), 3/2)
     delta_t = 0.15
-    noise_epsilon = 0.1  # 0.08 for noisy curve
+    noise_epsilon = 0  # 0.1 for noisy curve
     for k in range(number_of_samples):
         new_cloud = []
         for point_num in range(number_of_points):

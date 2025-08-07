@@ -50,5 +50,7 @@ for layer, k in zip(pyramid_norms, range(decomposition_levels)):
     axs[k].set_xticks(np.linspace(0, len(curve), 11, dtype=int), fontsize=25)
     axs[k].spines[['right', 'top']].set_visible(False)
 
+
+print("Optimality number = ", uf.elementary_curve_optimality(curve=curve, levels=decomposition_levels))
 plt.savefig('Figures/pyramid_electromagnetic.pdf', format='pdf', bbox_inches='tight')
 plt.show()
