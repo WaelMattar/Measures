@@ -39,9 +39,9 @@ def get_curve(number_of_points: int = 10, number_of_samples: int = 640):
 
     # Sample points
     core = np.ones(shape=(number_of_points, 2))
-    core[:, 0] = -2
+    core[:, 0] = -3
     core[:, 1] = 1
-    initial_points = np.random.normal(0, 0.2, 20).reshape((number_of_points, 2))  # 0.2 for experiment 2
+    initial_points = np.random.normal(0, 0.3, 20).reshape((number_of_points, 2))  # 0.2 for experiment 2
     initial_points = core + initial_points
 
     # Calculate curve
@@ -50,12 +50,16 @@ def get_curve(number_of_points: int = 10, number_of_samples: int = 640):
     y = sympy.Symbol('y')
     f_x = (x + 1) / pow(((x + 1) ** 2 + y ** 2), 3/2) - (x - 1) / pow(((x - 1) ** 2 + y ** 2), 3/2)
     f_y = y / pow(((x + 1) ** 2 + y ** 2), 3/2) - y / pow(((x - 1) ** 2 + y ** 2), 3/2)
-    delta_t = 0.281
+    delta_t = 0.2
+    noise_epsilon = 0  # 0.05
     for k in range(number_of_samples):
         new_cloud = []
         for point_num in range(number_of_points):
             new_x = f_x.subs({x: curve[-1][point_num, 0], y: curve[-1][point_num, 1]})
             new_y = f_y.subs({x: curve[-1][point_num, 0], y: curve[-1][point_num, 1]})
+            if noise_epsilon > 0:
+                new_x += np.random.normal(0, noise_epsilon)
+                new_y += np.random.normal(0, noise_epsilon)
             new_point = np.array([curve[-1][point_num, 0] + delta_t * new_x, curve[-1][point_num, 1] + delta_t * new_y], dtype=np.float64)
             new_cloud.append(new_point)
         curve.append(np.vstack(new_cloud))
