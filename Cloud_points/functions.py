@@ -39,9 +39,9 @@ def get_curve(number_of_points: int = 10, number_of_samples: int = 640):
 
     # Sample points
     core = np.ones(shape=(number_of_points, 2))
-    core[:, 0] = -3
+    core[:, 0] = -2.5
     core[:, 1] = 1
-    initial_points = np.random.normal(0, 0.3, 20).reshape((number_of_points, 2))  # 0.2 for experiment 2
+    initial_points = np.random.normal(0, 0.3, number_of_points*2).reshape((number_of_points, 2))  # 0.2 for experiment 2
     initial_points = core + initial_points
 
     # Calculate curve
@@ -50,8 +50,8 @@ def get_curve(number_of_points: int = 10, number_of_samples: int = 640):
     y = sympy.Symbol('y')
     f_x = (x + 1) / pow(((x + 1) ** 2 + y ** 2), 3/2) - (x - 1) / pow(((x - 1) ** 2 + y ** 2), 3/2)
     f_y = y / pow(((x + 1) ** 2 + y ** 2), 3/2) - y / pow(((x - 1) ** 2 + y ** 2), 3/2)
-    delta_t = 0.2
-    noise_epsilon = 0  # 0.05
+    delta_t = 0.15
+    noise_epsilon = 0.1  # 0.08 for noisy curve
     for k in range(number_of_samples):
         new_cloud = []
         for point_num in range(number_of_points):
