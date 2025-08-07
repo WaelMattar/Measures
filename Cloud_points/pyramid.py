@@ -5,7 +5,7 @@ import functions as uf
 np.random.seed(5)
 
 curve = uf.get_curve(number_of_points=10)
-decomposition_levels = 4
+decomposition_levels = 6
 pyramid = uf.elementary_multiscale_transform(curve=curve, levels=decomposition_levels)
 pyramid_norms = uf.elementary_multiscale_transform_norms(curve=curve, levels=decomposition_levels)
 reconstruction = uf.inverse_multiscale_transform(pyramid=pyramid)
@@ -18,8 +18,8 @@ y = np.arange(-1, 9, 0.1)
 X, Y = np.meshgrid(x, y)
 
 # Assign vector directions
-Ex = (X + 1) / ((X + 1) ** 2 + Y ** 2) - (X - 1) / ((X - 1) ** 2 + Y ** 2)
-Ey = Y / ((X + 1) ** 2 + Y ** 2) - Y / ((X - 1) ** 2 + Y ** 2)
+Ex = (X + 1) / pow(((X + 1) ** 2 + Y ** 2), 3/2) - (X - 1) / pow(((X - 1) ** 2 + Y ** 2), 3/2)
+Ey = Y / pow(((X + 1) ** 2 + Y ** 2), 3/2) - Y / pow(((X - 1) ** 2 + Y ** 2), 3/2)
 
 # Depict illustration
 coarse = pyramid[0]

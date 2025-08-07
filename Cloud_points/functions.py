@@ -35,22 +35,22 @@ class P_weight:
         return G2, X
 
 
-def get_curve(number_of_points: int = 10, number_of_samples: int = 160):
+def get_curve(number_of_points: int = 10, number_of_samples: int = 640):
 
     # Sample points
     core = np.ones(shape=(number_of_points, 2))
-    core[:, 0] = -3
+    core[:, 0] = -2
     core[:, 1] = 1
-    initial_points = np.random.normal(0, 0.5, 20).reshape((number_of_points, 2))  # 0.2 for experiment 2
+    initial_points = np.random.normal(0, 0.2, 20).reshape((number_of_points, 2))  # 0.2 for experiment 2
     initial_points = core + initial_points
 
     # Calculate curve
     curve = [initial_points]
     x = sympy.Symbol('x')
     y = sympy.Symbol('y')
-    f_x = (x + 1) / ((x + 1) ** 2 + y ** 2) - (x - 1) / ((x - 1) ** 2 + y ** 2)
-    f_y = y / ((x + 1) ** 2 + y ** 2) - y / ((x - 1) ** 2 + y ** 2)
-    delta_t = 0.28
+    f_x = (x + 1) / pow(((x + 1) ** 2 + y ** 2), 3/2) - (x - 1) / pow(((x - 1) ** 2 + y ** 2), 3/2)
+    f_y = y / pow(((x + 1) ** 2 + y ** 2), 3/2) - y / pow(((x - 1) ** 2 + y ** 2), 3/2)
+    delta_t = 0.2
     for k in range(number_of_samples):
         new_cloud = []
         for point_num in range(number_of_points):
