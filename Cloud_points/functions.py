@@ -23,8 +23,8 @@ class P_weight:
         G2 = ot.emd(m_mu, m_nu, M2)
 
         # get indices of nonzero entries
-        A = np.matrix.nonzero(G2)
-        A = [list(A[0]), list(A[1])]
+        A = np.argwhere(G2 > 1e-8)
+        A = [list(A[:, 0]), list(A[:, 1])]
 
         # calculate the new distribution
         X = []
